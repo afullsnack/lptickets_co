@@ -13,6 +13,6 @@ html, body {
 
 @layer components {
   .container {
-    @apply w-screen min-h-screen mobile:w-[100vw] mobile:min-w-full flex flex-col items-stretch justify-start my-0 mx-auto;
+    @apply w-screen min-h-screen desktop:max-w-screen-desktop bg-black mobile:w-[100vw] mobile:min-w-full flex flex-col items-stretch justify-start my-0 mx-auto;
   }
 }
