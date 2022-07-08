@@ -1,56 +1,55 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { AiFillAppstore } from "react-icons/ai";
 import { FaStar, FaTicketAlt } from "react-icons/fa";
 // import resolveConfig from "tailwindcss/resolveConfig";
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../tailwind.config"; // Fix the path
+// import resolveConfig from "tailwindcss/resolveConfig";
+// import tailwindConfig from "../../tailwind.config";
 // import { ButtonPrimary } from "./Button";
 // import Logo from "./Logo";
 
-const fullConfig = resolveConfig(tailwindConfig);
+// const fullConfig = resolveConfig(tailwindConfig);
 
-export const getBreakpointValue = (value: string): number =>
-  +fullConfig.theme.screens[value].slice(
-    0,
-    fullConfig.theme.screens[value].indexOf("px")
-  );
+// export const getBreakpointValue = (value: string): number =>
+//   +fullConfig.theme.screens[value].slice(
+//     0,
+//     fullConfig.theme.screens[value].indexOf("px")
+//   );
 
-export const getCurrentBreakpoint = (): string | undefined => {
-  let currentBreakpoint: string | undefined;
-  let biggestBreakpointValue = 0;
-  for (const breakpoint of Object.keys(fullConfig.theme.screens)) {
-    const breakpointValue = getBreakpointValue(breakpoint);
-    if (
-      breakpointValue > biggestBreakpointValue &&
-      window.innerWidth >= breakpointValue
-    ) {
-      biggestBreakpointValue = breakpointValue;
-      currentBreakpoint = breakpoint;
-    }
-  }
-  return currentBreakpoint;
-};
+// export const getCurrentBreakpoint = (): string | undefined => {
+//   let currentBreakpoint: string | undefined;
+//   let biggestBreakpointValue = 0;
+//   for (const breakpoint of Object.keys(fullConfig.theme.screens)) {
+//     const breakpointValue = getBreakpointValue(breakpoint);
+//     if (
+//       breakpointValue > biggestBreakpointValue &&
+//       window.innerWidth >= breakpointValue
+//     ) {
+//       biggestBreakpointValue = breakpointValue;
+//       currentBreakpoint = breakpoint;
+//     }
+//   }
+//   return currentBreakpoint;
+// };
 
 export default function withLayout(BaseComp: React.ElementType) {
   const Page: React.FunctionComponent = (props) => {
     const router = useRouter();
     const { pathname } = router;
-    const [isMobile, setIsMobile] = useState(false);
-    useEffect(() => {
-      console.log(getCurrentBreakpoint(), "Break point value");
-      setIsMobile(getCurrentBreakpoint() === "mobile");
+    // const [isMobile, setIsMobile] = useState(false);
+    // useEffect(() => {
+    //   console.log(getCurrentBreakpoint(), "Break point value");
+    //   setIsMobile(getCurrentBreakpoint() === "mobile");
 
-      function handleResize() {
-        setIsMobile(getCurrentBreakpoint() === "mobile");
-      }
-      // Add event listener
-      window.addEventListener("resize", handleResize);
-      // Call handler right away so state gets updated with initial window size
-      handleResize();
-      // Remove event listener on cleanup
-      return () => window.removeEventListener("resize", handleResize);
-    }, []); //Call once
+    //   function handleResize() {
+    //     setIsMobile(getCurrentBreakpoint() === "mobile");
+    //   }
+    //   // Add event listener
+    //   window.addEventListener("resize", handleResize);
+    //   // Call handler right away so state gets updated with initial window size
+    //   handleResize();
+    //   // Remove event listener on cleanup
+    //   return () => window.removeEventListener("resize", handleResize);
+    // }, []); //Call once
 
     return (
       <>

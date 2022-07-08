@@ -49,7 +49,8 @@ const Events: NextPage = () => {
       {new Array(5).fill("event name").map((item, idx) => (
         <EventCard
           key={item + idx.toString()}
-          onClick={(e) => {
+          onClick={(e: any) => {
+            console.log("EventCard clicked", e);
             router.push(`/user/events/${item + idx.toString()}`);
           }}
         />

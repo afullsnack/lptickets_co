@@ -1,4 +1,4 @@
-export const Carousel = ({ children, itemLen }) => {
+export const Carousel = ({ children, itemLen }: any) => {
   return (
     <div className="carousel relative w-full h-full carousel-center max-w-md px-5 py-0 space-x-3 rounded-none">
       {children}

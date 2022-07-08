@@ -1,6 +1,6 @@
 import { FaShare, FaStar } from "react-icons/fa";
 
-export const EventCard = ({ onClick }) => {
+export const EventCard = ({ onClick }: any) => {
   return (
     <div className="flex items-stretch justify-center w-full rounded-xl overflow-hidden mb-3">
       <div
