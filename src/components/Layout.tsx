@@ -55,9 +55,77 @@ export default function withLayout(BaseComp: React.ElementType) {
     return (
       <>
         {/* <Logo /> */}
-        {!isMobile && (
-          <div className="w-[100%] bg-black flex items-center justify-center desktop:pr-6 desktop:pl-3 pr-4">
-            <div className="w-[100%] max-w-lg h-20 flex py-2 items-stretch justify-center rounded-sm bg-transparent">
+        {/* {!isMobile && ( */}
+        <div className="desktop:flex mobile:hidden w-[100%] bg-black flex items-center justify-center desktop:pr-6 desktop:pl-3 pr-4">
+          <div className="w-[100%] max-w-lg h-20 flex py-2 items-stretch justify-center rounded-sm bg-transparent">
+            <div
+              className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
+                pathname.includes("favorite")
+                  ? "bg-orange-500"
+                  : "bg-transparent"
+              } rounded-xl`}
+              onClick={(e) => router.push("/user/favorite")}
+            >
+              <FaStar
+                size={20}
+                // color={pathname.includes("wallet") ? "#0059AC" : "#8895A7"}
+                className="text-white"
+              />
+              <span className={`text-md font-medium  ml-2 text-white`}>
+                Favorite
+              </span>
+            </div>
+            <div
+              className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
+                pathname.includes("events") ? "bg-orange-500" : "bg-transparent"
+              } rounded-xl`}
+              onClick={(e) => router.push("/user/events")}
+            >
+              <AiFillAppstore
+                size={20}
+                // color={pathname.includes("home") ? "#0059AC" : "#8895A7"}
+                className="text-white"
+              />
+              <span className={`text-md font-medium ml-2 text-white`}>
+                Events
+              </span>
+            </div>
+
+            <div
+              className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
+                pathname.includes("tickets")
+                  ? "bg-orange-500"
+                  : "bg-transparent"
+              } rounded-xl`}
+              onClick={(e) => router.push("/user/tickets")}
+            >
+              <FaTicketAlt
+                size={20}
+                // color={pathname.includes("market") ? "#0059AC" : "#8895A7"}
+                className="text-white"
+              />
+              <span className={`text-md font-medium  ml-2 text-white`}>
+                Tickets
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* )} */}
+        {/* <div className="rounded-md w-auto h-8 flex items-center justify-center">
+            <div className="flex items-center justify-center py-2 px-2 rounded-md border-solid border-[#E2EDF6] border-[1px] bg-transparent mr-2">
+              <div className="indicator">
+                <span className="indicator-item badge badge-error badge-xs"></span>
+                <FaBell color="#8895A7" size={"14px"} />
+              </div>
+            </div>
+          </div> */}
+        <div className="container">
+          <div className="w-[100%] mobile:pb-[100px] p-0 min-h-screen h-max flex flex-col items-center justify-start my-0 mx-auto scroll-smooth">
+            <BaseComp {...props} />
+          </div>
+          {/* {isMobile && ( */}
+          <div className="mobile:visible desktop:hidden w-[100%] bg-black flex items-center mobile:justify-center justify-center py-4 mobile:px-5 fixed bottom-0 left-0 right-0">
+            <div className="w-[100%] max-w-md h-16 flex py-2 items-stretch justify-center rounded-sm bg-transparent">
               <div
                 className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
                   pathname.includes("favorite")
@@ -71,9 +139,15 @@ export default function withLayout(BaseComp: React.ElementType) {
                   // color={pathname.includes("wallet") ? "#0059AC" : "#8895A7"}
                   className="text-white"
                 />
-                <span className={`text-md font-medium  ml-2 text-white`}>
-                  Favorite
-                </span>
+                {/* <span
+                    className={`text-md font-medium  ml-2 ${
+                      pathname.includes("wallet")
+                        ? "text-primary"
+                        : "text-slate-600"
+                    }`}
+                  >
+                    Favorite
+                  </span> */}
               </div>
               <div
                 className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
@@ -88,9 +162,15 @@ export default function withLayout(BaseComp: React.ElementType) {
                   // color={pathname.includes("home") ? "#0059AC" : "#8895A7"}
                   className="text-white"
                 />
-                <span className={`text-md font-medium ml-2 text-white`}>
+                {/* <span
+                  className={`text-md font-medium ml-2 ${
+                    pathname.includes("home")
+                      ? "text-primary"
+                      : "text-slate-600"
+                  }`}
+                >
                   Events
-                </span>
+                </span> */}
               </div>
 
               <div
@@ -106,89 +186,7 @@ export default function withLayout(BaseComp: React.ElementType) {
                   // color={pathname.includes("market") ? "#0059AC" : "#8895A7"}
                   className="text-white"
                 />
-                <span className={`text-md font-medium  ml-2 text-white`}>
-                  Tickets
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* <div className="rounded-md w-auto h-8 flex items-center justify-center">
-            <div className="flex items-center justify-center py-2 px-2 rounded-md border-solid border-[#E2EDF6] border-[1px] bg-transparent mr-2">
-              <div className="indicator">
-                <span className="indicator-item badge badge-error badge-xs"></span>
-                <FaBell color="#8895A7" size={"14px"} />
-              </div>
-            </div>
-          </div> */}
-        <div className="container">
-          <div className="w-[100%] mobile:pb-[112px] p-0 h-auto flex flex-col items-start justify-center my-0 mx-auto scroll-smooth">
-            <BaseComp {...props} />
-          </div>
-          {isMobile && (
-            <div className="w-[100%] bg-black desktop:hidden flex items-center mobile:justify-center justify-center py-4 px-2 fixed bottom-0 left-0 right-0">
-              <div className="w-[100%] max-w-md h-16 flex py-2 items-stretch justify-center rounded-sm bg-transparent">
-                <div
-                  className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
-                    pathname.includes("favorite")
-                      ? "bg-orange-500"
-                      : "bg-transparent"
-                  } rounded-xl`}
-                  onClick={(e) => router.push("/user/favorite")}
-                >
-                  <FaStar
-                    size={20}
-                    // color={pathname.includes("wallet") ? "#0059AC" : "#8895A7"}
-                    className="text-white"
-                  />
-                  {/* <span
-                    className={`text-md font-medium  ml-2 ${
-                      pathname.includes("wallet")
-                        ? "text-primary"
-                        : "text-slate-600"
-                    }`}
-                  >
-                    Favorite
-                  </span> */}
-                </div>
-                <div
-                  className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
-                    pathname.includes("events")
-                      ? "bg-orange-500"
-                      : "bg-transparent"
-                  } rounded-xl`}
-                  onClick={(e) => router.push("/user/events")}
-                >
-                  <AiFillAppstore
-                    size={20}
-                    // color={pathname.includes("home") ? "#0059AC" : "#8895A7"}
-                    className="text-white"
-                  />
-                  {/* <span
-                  className={`text-md font-medium ml-2 ${
-                    pathname.includes("home")
-                      ? "text-primary"
-                      : "text-slate-600"
-                  }`}
-                >
-                  Events
-                </span> */}
-                </div>
-
-                <div
-                  className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
-                    pathname.includes("tickets")
-                      ? "bg-orange-500"
-                      : "bg-transparent"
-                  } rounded-xl`}
-                  onClick={(e) => router.push("/user/tickets")}
-                >
-                  <FaTicketAlt
-                    size={20}
-                    // color={pathname.includes("market") ? "#0059AC" : "#8895A7"}
-                    className="text-white"
-                  />
-                  {/* <span
+                {/* <span
                   className={`text-md font-medium  ml-2 ${
                     pathname.includes("market")
                       ? "text-primary"
@@ -197,10 +195,10 @@ export default function withLayout(BaseComp: React.ElementType) {
                 >
                   Tickets
                 </span> */}
-                </div>
               </div>
             </div>
-          )}
+          </div>
+          {/* )} */}
         </div>
       </>
     );

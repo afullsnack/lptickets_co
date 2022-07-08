@@ -1,7 +1,12 @@
-export const EventCard = () => {
+import { FaShare, FaStar } from "react-icons/fa";
+
+export const EventCard = ({ onClick }) => {
   return (
     <div className="flex items-stretch justify-center w-full rounded-xl overflow-hidden mb-3">
-      <div className="w-full bg-gray-100 p-3 flex-[4] flex flex-col items-start justify-center">
+      <div
+        className="w-full bg-gray-100 p-3 flex-[4] flex flex-col items-start justify-center"
+        onClick={onClick}
+      >
         <h1 className="text-gray-700 text-lg font-bold mb-4">Event Title</h1>
         <span className="text-slate-400 text-xs font-semibold">Place</span>
         <span className="text-gray-800 text-sm font-semibold w-full text-ellipsis">
@@ -30,7 +35,21 @@ export const EventCard = () => {
           </div>
         </div>
       </div>
-      <div className="flex-1 flex rounded-r-xl border-gray-100 border-4 border-solid items-stretch"></div>
+      <div className="flex-1 flex flex-col justify-evenly items-center rounded-r-xl border-gray-100 border-4 border-solid">
+        <FaShare
+          color="white"
+          onClick={(e) => {
+            console.log("Share icon clicked", e);
+          }}
+        />
+        <div className="w-full h-1 bg-gray-300"></div>
+        <FaStar
+          color="white"
+          onClick={(e) => {
+            console.log("Fave icon clicked", e);
+          }}
+        />
+      </div>
     </div>
   );
 };

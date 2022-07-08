@@ -1,8 +1,10 @@
 import type { NextPage } from "next";
-import { EventCard } from "../../components/Event";
-import withLayout from "../../components/Layout";
+import { useRouter } from "next/router";
+import { EventCard } from "../../../components/Event";
+import withLayout from "../../../components/Layout";
 
 const Events: NextPage = () => {
+  const router = useRouter();
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-4 w-full h-full flex flex-col items-center justify-center my-0 mx-auto">
       <form className="w-full mb-5">
@@ -44,8 +46,13 @@ const Events: NextPage = () => {
           </button>
         </div>
       </form>
-      {new Array(5).fill("event name").map((item) => (
-        <EventCard />
+      {new Array(5).fill("event name").map((item, idx) => (
+        <EventCard
+          key={item + idx.toString()}
+          onClick={(e) => {
+            router.push(`/user/events/${item + idx.toString()}`);
+          }}
+        />
       ))}
     </div>
   );

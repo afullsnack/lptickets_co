@@ -16,6 +16,7 @@
     "@trpc/next": "^9.25.3",
     "@trpc/react": "^9.25.3",
     "@trpc/server": "^9.25.3",
+    "daisyui": "^2.18.1",
     "flowbite": "^1.4.7",
     "flowbite-react": "^0.1.2",
     "next": "12.2.1-canary.2",
