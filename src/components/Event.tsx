@@ -1,6 +1,5 @@
-import { FaShare } from "react-icons/fa";
-import UseAnimations from "react-useanimations";
-import star from "react-useanimations/lib/star";
+import Link from "next/link";
+import { FaShare, FaStar } from "react-icons/fa";
 
 export const EventCard = ({ onClick }: any) => {
   return (
@@ -45,25 +44,32 @@ export const EventCard = ({ onClick }: any) => {
           }}
         />
         <div className="w-full h-1 bg-gray-300"></div>
-        <Star />
-        {/* <FaStar
+        <FaStar
           color="white"
           onClick={(e) => {
             console.log("Fave icon clicked", e);
           }}
-        /> */}
+        />
       </div>
     </div>
   );
 };
 
-export const Star = () => (
-  <UseAnimations
-    animation={star}
-    // reverse={false}
-    autoPlay={true}
-    strokeColor="white"
-    fillColor="white"
-    style={{ padding: 25, cursor: "pointer" }}
-  />
+export const EmptyCard = () => (
+  <div className="flex items-stretch justify-center w-full rounded-xl overflow-hidden mb-3 last:mb-0">
+    <div
+      className="w-full bg-gray-100 p-3 flex flex-col items-start justify-center"
+      // onClick={onClick}
+    >
+      <h1 className="text-gray-800 text-md text-center font-normal">
+        No events have been added yet, click the button at the top right to
+        create a new event.
+        <Link href="/user/events/create" passHref>
+          <a className="block px-4 py-2 text-orange-500 visited:text-orange-700">
+            Create ticket
+          </a>
+        </Link>
+      </h1>
+    </div>
+  </div>
 );
