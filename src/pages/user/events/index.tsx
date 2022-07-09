@@ -7,10 +7,14 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { EventCard } from "../../../components/Event";
 import withLayout from "../../../components/Layout";
+import { trpc } from "../../../utils/trpc";
 
 const Events: NextPage = () => {
   const router = useRouter();
   const [showActionsMenu, setShowActionsMenu] = useState(false);
+
+  const { data, isLoading, error } = trpc.useQuery(["events.getAll"]);
+  console.log(data, isLoading, error, "Query request for events");
 
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-4 w-full h-full flex flex-col items-center justify-center my-0 mx-auto">

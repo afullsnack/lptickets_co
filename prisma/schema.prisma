@@ -16,15 +16,15 @@ datasource db {
 // }
 
 model Event {
-    id           String      @id @default(auto()) @map("_id") @db.ObjectId
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
     title        String
     description  String
     location     String
     dateTime     DateTime
     totalTickets Int?
-    creator      User?       @relation(fields: [userId], references: [id])
-    favedBy      EventFave[]
-    userId       String?     @db.ObjectId
+    creator      User?    @relation(fields: [userId], references: [id])
+    likeCount    Int?
+    userId       String?  @db.ObjectId
     tickets      Ticket[]
 }
 
@@ -42,13 +42,13 @@ model Ticket {
 }
 
 // Many-to-Many relations model between Event and User
-model EventFave {
-    id      String  @id @default(auto()) @map("_id") @db.ObjectId
-    User    User?   @relation(fields: [userId], references: [id])
-    userId  String? @db.ObjectId
-    Event   Event?  @relation(fields: [eventId], references: [id])
-    eventId String? @db.ObjectId
-}
+// model EventFave {
+//     id      String  @id @default(auto()) @map("_id") @db.ObjectId
+//     user    User?   @relation(fields: [userId], references: [id])
+//     userId  String? @db.ObjectId
+//     event   Event?  @relation(fields: [eventId], references: [id])
+//     eventId String? @db.ObjectId
+// }
 
 // Necessary for Next auth
 model Account {
@@ -82,21 +82,20 @@ model Session {
 }
 
 model User {
-    id            String      @id @default(auto()) @map("_id") @db.ObjectId
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
     name          String?
-    email         String?     @unique
-    emailVerified DateTime?   @map("email_verified")
+    email         String?   @unique
+    emailVerified DateTime? @map("email_verified")
     image         String?
     accounts      Account[]
     sessions      Session[]
-    faveEvents    EventFave[]
+    faveEvents    Event[]
     tickets       Ticket[]
-    role          Role        @default(USER)
+    role          Role      @default(USER)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    Event Event[]
     @@map("users")
 }
 

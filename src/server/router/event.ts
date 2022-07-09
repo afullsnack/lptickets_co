@@ -69,7 +69,6 @@ export const eventRouter = createRouter()
           id: input.eventId,
         },
         include: {
-          favedBy: true,
           tickets: true,
           creator: true,
         },
@@ -83,10 +82,6 @@ export const eventRouter = createRouter()
   .query("getAll", {
     async resolve({ ctx }) {
       // return await ctx.prisma.example.findMany();
-      return await ctx.prisma.event.findMany({
-        include: {
-          favedBy: true,
-        },
-      });
+      return await ctx.prisma.event.findMany();
     },
   });
