@@ -8,16 +8,18 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
+  // adapters
+  session: {},
   adapter: PrismaAdapter(prisma),
+  // Configure one or more authentication providers
   providers: [
     // GithubProvider({
     //   clientId: process.env.GITHUB_ID,
     //   clientSecret: process.env.GITHUB_SECRET,
     // }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
     // ...add more providers here
     CredentialsProvider({
@@ -31,19 +33,41 @@ export const authOptions: NextAuthOptions = {
         email: {
           label: "Email",
           type: "email",
-          placeholder: "Enter your email address"
-        }
+          placeholder: "Enter your email address",
+        },
       },
       async authorize(credentials, _req) {
-        const user = { name: credentials?.name ?? "J Smith", email: credentials?.email ?? "example@lp.com" };
+        const user = {
+          id: 1,
+          name: credentials?.name ?? "J Smith",
+          email: credentials?.email ?? "example@lp.com",
+        };
         console.info(user, "signed in users info");
         //TODO: Call endpoint to create user and pass object to be stored in db
         return user;
       },
     }),
   ],
-  // callbacks: {
-  // }
+  callbacks: {
+    async session({ session, token, user }) {
+      session = {
+        ...session,
+        user: {
+          id: user.id,
+          ...session.user,
+        },
+      };
+      console.log(session, user, token, "Session data in [...nextauth.js]");
+      return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      console.log(token, user, account, profile, isNewUser, "<<<<[JWT]>>>>");
+
+      user && (token.user = user);
+
+      return token;
+    },
+  },
 };
 
 export default NextAuth(authOptions);
