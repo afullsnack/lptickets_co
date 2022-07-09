@@ -6,56 +6,88 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = "file:./db.sqlite"
-    // url      = env("DATABASE_URL")
+    provider = "mongodb"
+    // url      = "file:./db.sqlite"
+    url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
+// model Example {
+//     id String @id @default(cuid())
+// }
+
+model Event {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    title        String
+    description  String
+    location     String
+    dateTime     DateTime
+    totalTickets Int?
+    user         User     @relation(fields: [favedUserIds], references: [id])
+    favedUserIds String[] @db.ObjectId
+
+    @@index([favedUserIds])
+}
+
+model Ticket {
+    id     String   @id @default(auto()) @map("_id") @db.ObjectId
+    type   String
+    cost   Float
+    addons String[]
 }
 
 // Necessary for Next auth
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
+    id                String  @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String  @map("user_id")
     type              String
     provider          String
-    providerAccountId String
-    refresh_token     String?
-    access_token      String?
+    providerAccountId String  @map("provider_account_id")
+    refresh_token     String? @db.String
+    access_token      String? @db.String
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String?
+    id_token          String? @db.String
     session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
+    @@map("accounts")
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    sessionToken String   @unique @map("session_token")
+    userId       String   @map("user_id")
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("sessions")
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
     name          String?
     email         String?   @unique
-    emailVerified DateTime?
+    emailVerified DateTime? @map("email_verified")
     image         String?
     accounts      Account[]
     sessions      Session[]
+    favEvents     Event[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("users")
 }
 
 model VerificationToken {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
     identifier String
     token      String   @unique
     expires    DateTime
 
     @@unique([identifier, token])
+    @@map("verificationtokens")
 }

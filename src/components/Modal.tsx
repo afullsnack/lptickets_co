@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function useModal({ title, content }) {
+export function useModal({ title, content }: any) {
   const [visible, setVisible] = useState(false);
 
   const show = () => setVisible(true);
@@ -15,7 +15,7 @@ export function useModal({ title, content }) {
     },
     () => (
       <div
-        id="registerOTPModal"
+        id="defaultModal"
         tabIndex={-1}
         aria-hidden="true"
         className={`${
@@ -26,14 +26,14 @@ export function useModal({ title, content }) {
           {/* <!-- Modal content --> */}
           <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
             {/* <!-- Modal header --> */}
-            <div className="flex justify-between items-start p-4 rounded-t border-b bg-slate-100">
+            <div className="flex justify-between items-start p-3 rounded-t border-b bg-slate-100">
               <h3 className="text-lg font-medium text-gray-700 desktop:">
                 {title}
               </h3>
               <button
                 type="button"
                 className="text-gray-500 bg-opacity-50 hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                data-modal-toggle="registerOTPModal"
+                data-modal-toggle="defaultModal"
                 onClick={() => hide()}
               >
                 <svg

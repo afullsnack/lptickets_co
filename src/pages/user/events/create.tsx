@@ -1,40 +1,36 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import {
-  AiOutlineArrowLeft,
-  AiOutlineExclamationCircle,
-  AiOutlineLink,
-} from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { FaShareSquare } from "react-icons/fa";
 import { Carousel } from "../../../components/Carousel";
 import withLayout from "../../../components/Layout";
 import { useModal } from "../../../components/Modal";
 
-const SingleEvent: NextPage = () => {
+const CreateEvent: NextPage = () => {
   const router = useRouter();
 
   // TODO: Setup payment modal
   const [payModal, PaymentModal] = useModal({
     title: "Choose Payment Method",
-    content: <PaymentModalContent />,
+    content: <></>,
   });
 
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-6 w-full h-full flex flex-col items-center justify-center space-y-0 my-0 mx-auto">
-      <div className="flex items-center justify-between mb-8 py-2 px-5 space-x-4 w-full">
+      <div className="flex items-center justify-start mb-8 py-2 px-5 space-x-5 w-full">
         <AiOutlineArrowLeft
           className="text-white text-lg"
           onClick={(e) => router.back()}
         />
         <span className="text-white text-[16px] font-normal">
-          Tickets: Event Title Long
+          Create new event: Event details
         </span>
-        <AiOutlineExclamationCircle
+        {/* <AiOutlineExclamationCircle
           className="text-white text-lg"
           onClick={(e) => {
             console.log("More info clicked", e);
           }}
-        />
+        /> */}
       </div>
       {/* <div className="flex-grow flex flex-col"> */}
       <Carousel itemLen={3}>
@@ -130,7 +126,8 @@ const SingleEvent: NextPage = () => {
             payModal.show();
           }}
         >
-          Buy Ticket
+          Next
+          <AiOutlineArrowRight className="ml-3" />
           <div className="w-8 h-8 bg-black absolute right-[-16px] top-[-16px] rounded-full"></div>
           <div className="w-8 h-8 bg-black absolute left-[-16px] top-[-16px] rounded-full"></div>
         </button>
@@ -141,32 +138,4 @@ const SingleEvent: NextPage = () => {
   );
 };
 
-const PaymentModalContent = () => {
-  return (
-    <>
-      <div className="flex items-center justify-start space-x-4 p-3 w-full rounded-box bg-slate-900 shadow-lg">
-        <div className="w-14 h-14 rounded-xl bg-[url('/btc-ltn-pay-thumb-2.webp')] bg-cover bg-center bg-no-repeat"></div>
-        {/* <img src="/flutterwave-logo.png" width={250} alt="Flutterwave logo" /> */}
-        <div className="flex flex-col flex-grow ml-4">
-          <span className="text-white text-lg font-semibold">Bitcoin</span>
-          <span className="text-orange-400 text-sm font-light">
-            Lightening network{" "}
-          </span>
-        </div>
-        <AiOutlineLink className="text-white font-semibold text-xl" />
-      </div>
-      <div className="flex items-center justify-start space-x-4 p-3 w-full rounded-box bg-slate-900 shadow-lg">
-        <div className="w-14 h-14 rounded-xl bg-[url('/flutterwave-logo-thumb.png')] bg-cover bg-center bg-no-repeat"></div>
-        <div className="flex flex-col flex-grow">
-          <span className="text-white text-lg font-semibold">Card</span>
-          <span className="text-orange-400 text-sm font-light ">
-            Flutterwave
-          </span>
-        </div>
-        <AiOutlineLink className="text-white font-semibold text-xl" />
-      </div>
-    </>
-  );
-};
-
-export default withLayout(SingleEvent);
+export default withLayout(CreateEvent);

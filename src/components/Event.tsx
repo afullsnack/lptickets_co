@@ -1,8 +1,10 @@
-import { FaShare, FaStar } from "react-icons/fa";
+import { FaShare } from "react-icons/fa";
+import UseAnimations from "react-useanimations";
+import star from "react-useanimations/lib/star";
 
 export const EventCard = ({ onClick }: any) => {
   return (
-    <div className="flex items-stretch justify-center w-full rounded-xl overflow-hidden mb-3">
+    <div className="flex items-stretch justify-center w-full rounded-xl overflow-hidden mb-3 last:mb-0">
       <div
         className="w-full bg-gray-100 p-3 flex-[4] flex flex-col items-start justify-center"
         onClick={onClick}
@@ -43,13 +45,25 @@ export const EventCard = ({ onClick }: any) => {
           }}
         />
         <div className="w-full h-1 bg-gray-300"></div>
-        <FaStar
+        <Star />
+        {/* <FaStar
           color="white"
           onClick={(e) => {
             console.log("Fave icon clicked", e);
           }}
-        />
+        /> */}
       </div>
     </div>
   );
 };
+
+export const Star = () => (
+  <UseAnimations
+    animation={star}
+    // reverse={false}
+    autoPlay={true}
+    strokeColor="white"
+    fillColor="white"
+    style={{ padding: 25, cursor: "pointer" }}
+  />
+);

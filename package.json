@@ -24,9 +24,13 @@
     "next": "12.2.1-canary.2",
     "next-auth": "^4.8.0",
     "react": "18.2.0",
+    "react-barcode": "^1.4.1",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
+    "react-qr-code": "^2.0.7",
     "react-query": "^3.39.1",
+    "framer-motion": "^6.2.3",
+    "moment": "^2.29.1",
     "react-useanimations": "^2.0.8",
     "superjson": "^1.9.1",
     "zod": "^3.17.3"

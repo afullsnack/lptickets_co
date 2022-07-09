@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { AiOutlineArrowRight } from "react-icons/ai";
 // import { trpc } from "../utils/trpc";
@@ -13,7 +14,15 @@ const Home: NextPage = () => {
       <div className="container relative flex flex-col items-center justify-center bg-black min-h-screen overflow-hidden p-10 px-0 mx-auto md:py-20 md:p-10 md:px-0">
         <div className="absolute bottom-0 right-0 left-0 h-auto">
           <div className="absolute bottom-10 left-0 h-auto px-6 py-3">
-            <button className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+            <button
+              className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+              onClick={(e) => {
+                console.log("Clicked on sign in", e);
+                signIn("google", {
+                  callbackUrl: "http://localhost:3000/user/events",
+                });
+              }}
+            >
               <span className="relative flex items-center justify-center px-5 py-2.5 transition-all ease-in duration-75 bg-black text-white font-medium dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                 <svg
                   className="w-4 h-4 mr-2 -ml-1"
