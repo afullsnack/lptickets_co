@@ -8,6 +8,7 @@ export const CreateEventData = z.object({
   location: z.string(),
   dateTime: z.date(),
   totalTickets: z.number(),
+  showTotalTickets: z.boolean(),
 });
 
 export const SingleEventInput = z.object({
