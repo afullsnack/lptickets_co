@@ -2,22 +2,26 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createRouter } from "./context";
 
-export const CreateEventData = z.object({
+const createEventData = z.object({
   title: z.string(),
   description: z.string(),
   location: z.string(),
   dateTime: z.date(),
   totalTickets: z.number(),
-  showTotalTickets: z.boolean(),
+  // showTotalTickets: z.boolean(),
 });
 
-export const SingleEventInput = z.object({
+export type CreateEventData = z.TypeOf<typeof createEventData>;
+
+const singleEventInput = z.object({
   eventId: z.string(),
 });
 
+export type SingleEventInput = z.TypeOf<typeof singleEventInput>;
+
 export const eventRouter = createRouter()
   .mutation("create", {
-    input: CreateEventData,
+    input: createEventData,
     async resolve({ ctx, input }) {
       // Check that user is logged in
       if (!ctx.session) {
@@ -53,14 +57,14 @@ export const eventRouter = createRouter()
           },
         });
 
-        console.log(updateUser, "Updated user ");
+        console.log(updateUser, "Updated user", event, "Event");
       }
 
       return event;
     },
   })
   .query("getSingle", {
-    input: SingleEventInput,
+    input: singleEventInput,
     async resolve({ input, ctx }) {
       console.log("Get one event input id", input.eventId);
       console.log("User session data", ctx.session);

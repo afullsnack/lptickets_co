@@ -12,8 +12,8 @@ export const appRouter = createRouter()
   .transformer(superjson)
   .merge("auth.", authRouter)
   .merge("events.", eventRouter)
-  .merge("ticket", ticketRoute)
-  .merge("pay", payRouter);
+  .merge("ticket.", ticketRoute)
+  .merge("pay.", payRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

@@ -2,21 +2,27 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createRouter } from "./context";
 
-export const CreateTicketData = z.object({
-  type: z.string(),
-  cost: z.number(),
-  ticketCount: z.number(),
-  eventId: z.string(),
+const createTicketData = z.array(
+  z.object({
+    type: z.string(),
+    cost: z.number(),
+    ticketCount: z.number(),
+    eventId: z.string(),
+    addons: z.array(z.string()).nullish(),
+  })
+);
+
+export type CreateTicketData = z.TypeOf<typeof createTicketData>;
+
+const singleTicketInput = z.object({
   userId: z.string(),
 });
 
-export const SingleTicketInput = z.object({
-  userId: z.string(),
-});
+export type SingleTicketInput = z.TypeOf<typeof singleTicketInput>;
 
 export const ticketRoute = createRouter()
   .mutation("create", {
-    input: CreateTicketData,
+    input: createTicketData,
     async resolve({ ctx, input }) {
       // Check that user is logged in
       if (!ctx.session) {
@@ -31,7 +37,7 @@ export const ticketRoute = createRouter()
     },
   })
   .query("getAllUserTickets", {
-    input: SingleTicketInput,
+    input: singleTicketInput,
     async resolve({ input, ctx }) {
       console.log("Get one event input id", input.userId);
       console.log("User session data", ctx.session);

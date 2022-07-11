@@ -9,9 +9,12 @@ import { FaShareSquare } from "react-icons/fa";
 import { Carousel } from "../../../components/Carousel";
 import withLayout from "../../../components/Layout";
 import { useModal } from "../../../components/Modal";
+// import { trpc } from "../../../utils/trpc";
 
 const SingleEvent: NextPage = () => {
   const router = useRouter();
+
+  // const { data, isLoading, error } = trpc.useQuery(["events.getSingle", { eventId: }]);
 
   // TODO: Setup payment modal
   const [payModal, PaymentModal] = useModal({

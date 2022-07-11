@@ -151,6 +151,7 @@ const Events: NextPage = () => {
         data.map((item) => (
           <EventCard
             key={item.id}
+            item={item}
             onClick={(e: any) => {
               console.log("EventCard clicked", e);
               router.push(`/user/events/${item.id}`);
