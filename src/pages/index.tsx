@@ -12,6 +12,9 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="container relative flex flex-col items-center justify-center bg-black min-h-screen overflow-hidden p-10 px-0 mx-auto md:py-20 md:p-10 md:px-0">
+        <div className="flex w-full absolute top-0 left-0 right-0">
+          <img src="/logo.png" width={300} alt="Logo" />
+        </div>
         <div className="absolute bottom-0 right-0 left-0 h-auto">
           <div className="absolute bottom-10 left-0 h-auto px-6 py-3">
             <button

@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { EventCard } from "../../components/Event";
 import withLayout from "../../components/Layout";
 
 function Favorite() {
@@ -7,15 +6,26 @@ function Favorite() {
 
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-4 w-full h-full flex flex-col items-center justify-center my-0 mx-auto">
-      {new Array(5).fill("event name").map((item, idx) => (
+      <h1>Favorites</h1>
+      {/* {new Array(5).fill("event name").map((item, idx) => (
         <EventCard
           key={item + idx.toString()}
           onClick={(e: any) => {
             console.log("EventCard clicked", e);
             router.push(`/user/favorite/${item + idx.toString()}`);
           }}
+          item={{
+            id: "",
+            title: "",
+            description: "",
+            location: "",
+            dateTime: new Date(),
+            totalTickets: null,
+            likeCount: null,
+            userId: null,
+          }}
         />
-      ))}
+      ))} */}
     </div>
   );
 }
