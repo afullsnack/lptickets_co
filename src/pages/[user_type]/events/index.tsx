@@ -13,6 +13,9 @@ const Events: NextPage = () => {
   const { data: session, status } = useSession();
   console.info(session, status, "Session data");
   const router = useRouter();
+  const { user_type } = router.query;
+  console.log(user_type, "User type wuery params");
+
   const [showActionsMenu, setShowActionsMenu] = useState(false);
 
   const { data, isLoading, error } = trpc.useQuery(["events.getAll"]);

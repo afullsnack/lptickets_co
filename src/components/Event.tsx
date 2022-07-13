@@ -2,7 +2,7 @@ import { Event } from "@prisma/client";
 import Link from "next/link";
 import { MouseEventHandler, useState } from "react";
 import { FaShare, FaStar } from "react-icons/fa";
-import { TicketData } from "../pages/user/events/create";
+import { TicketData } from "../pages/[user_type]/events/create";
 
 export const EventCard = ({
   onClick,

@@ -13,6 +13,8 @@ import { useModal } from "../../../components/Modal";
 
 const SingleEvent: NextPage = () => {
   const router = useRouter();
+  const { evid, user_type } = router.query;
+  console.log(evid, user_type, "Query params");
 
   // const { data, isLoading, error } = trpc.useQuery(["events.getSingle", { eventId: }]);
 
