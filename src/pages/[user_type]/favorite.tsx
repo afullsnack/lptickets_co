@@ -6,7 +6,7 @@ function Favorite() {
 
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-4 w-full h-full flex flex-col items-center justify-center my-0 mx-auto">
-      <h1>Favorites</h1>
+      <h1>No Faves to be viewed at this time</h1>
       {/* {new Array(5).fill("event name").map((item, idx) => (
         <EventCard
           key={item + idx.toString()}

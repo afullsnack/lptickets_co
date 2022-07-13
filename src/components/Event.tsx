@@ -6,62 +6,74 @@ import { TicketData } from "../pages/[user_type]/events/create";
 
 export const EventCard = ({
   onClick,
+  onShareClicked,
+  onFaveClicked,
+  isFaved = false,
   item,
 }: {
   onClick: MouseEventHandler<HTMLDivElement>;
+  onShareClicked: MouseEventHandler<SVGElement>;
+  onFaveClicked: MouseEventHandler<SVGElement>;
+  isFaved: Boolean;
   item: Event;
 }) => {
   return (
-    <div className="flex items-stretch justify-center w-full rounded-xl overflow-hidden mb-3 last:mb-0">
+    <div className="flex items-stretch justify-center w-full rounded-xl overflow-hidden mb-3 last:mb-0 border-slate-100 border-4">
       <div
-        className="w-full bg-gray-100 p-3 flex-[4] flex flex-col items-start justify-center"
+        className="w-full p-5 flex-[4] flex flex-col items-start justify-center hover:cursor-pointer"
         onClick={onClick}
       >
-        <h1 className="text-gray-700 text-lg font-bold mb-1">{item.title}</h1>
-        <h1 className="text-gray-500 text-xs text-ellipsis font-light mb-4">
+        <h1 className="text-gray-100 text-lg font-bold mb-1">{item.title}</h1>
+        <h1 className="text-gray-400 text-xs text-ellipsis font-light mb-4">
           {item.description}
         </h1>
-        <span className="text-slate-400 text-xs font-semibold">Place</span>
-        <span className="text-gray-800 text-sm font-semibold w-full text-ellipsis">
+        <span className="text-slate-100 text-xs font-semibold">Place</span>
+        <span className="text-gray-400 text-sm font-semibold w-full text-ellipsis">
           {item.location}
         </span>
         <div className="w-full flex items-center justify-between mt-4">
           <div className="flex flex-col flex-1">
-            <span className="text-slate-400 text-xs font-semibold">Date</span>
-            <span className="text-gray-800 text-sm font-semibold">
+            <span className="text-slate-100 text-xs font-semibold">Date</span>
+            <span className="text-gray-400 text-sm font-semibold">
               {item.dateTime.toLocaleDateString()}
             </span>
           </div>
           <div className="flex flex-col flex-1">
-            <span className="text-slate-400 text-xs font-semibold">Time</span>
-            <span className="text-gray-800 text-sm font-semibold">
+            <span className="text-slate-100 text-xs font-semibold">Time</span>
+            <span className="text-gray-400 text-sm font-semibold">
               {item.dateTime.toLocaleTimeString()}
             </span>
           </div>
         </div>
         <div className="w-full flex items-center justify-between mt-4">
           <div className="flex flex-col flex-1">
-            <span className="text-slate-400 text-xs font-semibold">Cost</span>
-            <span className="text-gray-800 text-sm font-semibold">$200</span>
+            <span className="text-slate-100 text-xs font-semibold">Cost</span>
+            <span className="text-gray-400 text-sm font-semibold">$$$</span>
           </div>
           <div className="flex flex-col flex-1">
-            <span className="text-slate-400 text-xs font-semibold">Seat</span>
-            <span className="text-gray-800 text-sm font-semibold">32</span>
+            <span className="text-slate-100 text-xs font-semibold">
+              Tickets left
+            </span>
+            <span className="text-gray-400 text-sm font-semibold">Hidden</span>
           </div>
         </div>
       </div>
-      <div className="flex-1 flex flex-col justify-evenly items-center rounded-r-xl border-gray-100 border-4 border-solid">
+      <div className="flex-1 flex flex-col justify-evenly items-center rounded-r-xl border-slate-100 border-l-4">
         <FaShare
-          color="white"
+          className="text-white hover:cursor-pointer"
           onClick={(e) => {
             console.log("Share icon clicked", e);
+            () => onShareClicked(e);
           }}
         />
-        <div className="w-full h-1 bg-gray-300"></div>
+        <div className="w-full h-1 bg-slate-100"></div>
         <FaStar
-          color="white"
+          className={`${
+            isFaved ? "text-yellow-200" : "text-white"
+          } hover:cursor-pointer`}
           onClick={(e) => {
             console.log("Fave icon clicked", e);
+            () => onFaveClicked(e);
           }}
         />
       </div>

@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 // import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
 // import { trpc } from "../utils/trpc";
 import { signIn, useSession } from "next-auth/react";
 
@@ -15,10 +15,17 @@ const Home: NextPage = () => {
     <div className="w-screen h-screen zig-zag">
       <div className="container relative flex flex-col items-center justify-center bg-transparent min-h-screen overflow-hidden p-10 px-0 mx-auto md:py-20 md:p-10 md:px-0">
         <div className="flex w-auto absolute top-12 items-center justify-center bg-gray-700 rounded-t-box rounded-br-box">
-          <img src="/logo.png" width={300} alt="Logo" />
+          <img src="/logo/logo-white.png" width={300} alt="Logo" />
         </div>
         <div className="absolute bottom-0 right-0 left-0 h-auto">
-          <div className="absolute bottom-10 left-0 desktop:left-1/3 h-auto px-6 py-3">
+          <div className="absolute bottom-10 left-0 desktop:left-1/3 h-auto px-6 py-3 flex flex-col">
+            {!session?.user && (
+              <div className="w-full p-2 bg-[rgba(0,0,0,.4)]">
+                <span className="text-sm text-white font-medium mb-3">
+                  Explore as a guest or
+                </span>
+              </div>
+            )}
             {!session?.user && (
               <button
                 className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-yellow-200 to-lime-500 group-hover:from-yellow-700 group-hover:to-lime-800 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-lime-400 dark:focus:ring-lime-800"
@@ -51,7 +58,7 @@ const Home: NextPage = () => {
             )}
             {session?.user && (
               <div className="flex flex-col w-full p-2 bg-[rgba(0,0,0,.4)]">
-                <span className="text-sm font-light mb-2">Welcome back</span>
+                <span className="text-sm font-light mb-2">Welcome</span>
                 <span className="text-2xl font-semibold">
                   {session?.user.name}
                 </span>
@@ -60,16 +67,11 @@ const Home: NextPage = () => {
           </div>
           <div className="group bg-white w-20 h-20 rounded-full absolute right-0 desktop:right-1/3 bottom-10 p-3 z-10 active:p-2 transition-all">
             <Link
-              href={session?.user ? "/user/events" : "#no-session"}
+              href={session?.user ? "/user/events" : "/guest/events"}
               passHref
             >
               <div className="bg-black w-full h-full rounded-full flex items-center justify-center hover:cursor-pointer">
-                {session?.user && (
-                  <AiOutlineArrowRight className="text-white text-xl" />
-                )}
-                {!session?.user && (
-                  <AiOutlineArrowLeft className="text-white text-xl active:relative group-active:-translate-x-2/3 transition-all" />
-                )}
+                <AiOutlineArrowRight className="text-white text-xl active:relative group-active:-translate-x-2/3 transition-all" />
               </div>
             </Link>
           </div>

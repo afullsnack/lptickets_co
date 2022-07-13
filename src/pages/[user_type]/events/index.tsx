@@ -70,7 +70,7 @@ const Events: NextPage = () => {
             // id="defaultActionsDropdown"
             // data-dropdown-toggle="menuDropdown"
             // data-dropdown-placement="bottom"
-            className="text-white bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-full text-2xl p-2 text-center inline-flex items-center dark:bg-orange-500 dark:hover:bg-orange-700 dark:focus:ring-orange-300"
+            className="text-white bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-full text-2xl p-2 text-center inline-flex items-center dark:bg-yellow-300 dark:hover:bg-yellow-500 dark:focus:ring-yellow-300"
             onClick={(e) => {
               console.log("Popup menu clicked", e);
               // router.push("/user/events/create");
@@ -102,16 +102,17 @@ const Events: NextPage = () => {
                   </a>
                 </Link>
               </li>
-              {session?.user?.role !== "USER" && (
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Metrics
-                  </a>
-                </li>
-              )}
+              {(typeof session !== null || typeof session !== "undefined") &&
+                session?.user?.role !== "USER" && (
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Metrics
+                    </a>
+                  </li>
+                )}
             </ul>
             <div className="py-1">
               <Link href="" passHref>
@@ -149,6 +150,13 @@ const Events: NextPage = () => {
           </svg>
         </div>
       )}
+      {!isLoading && !data && error && (
+        <>
+          <h1 className="text-lg text-white font-serif font-light">
+            {error.message}
+          </h1>
+        </>
+      )}
       {!isLoading &&
         data &&
         data.map((item) => (
@@ -159,6 +167,13 @@ const Events: NextPage = () => {
               console.log("EventCard clicked", e);
               router.push(`/user/events/${item.id}`);
             }}
+            onShareClicked={function (event): void {
+              throw new Error("Function not implemented.");
+            }}
+            onFaveClicked={function (event): void {
+              throw new Error("Function not implemented.");
+            }}
+            isFaved={false}
           />
         ))}
       {!isLoading && !data?.length && <EmptyCard />}

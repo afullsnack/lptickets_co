@@ -60,7 +60,7 @@ export default function withLayout(BaseComp: React.ElementType) {
             <div
               className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
                 pathname.includes("favorite")
-                  ? "bg-orange-500"
+                  ? "bg-yellow-300"
                   : "bg-transparent"
               } rounded-xl`}
               onClick={(e) => router.push("/user/favorite")}
@@ -76,7 +76,7 @@ export default function withLayout(BaseComp: React.ElementType) {
             </div>
             <div
               className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
-                pathname.includes("events") ? "bg-orange-500" : "bg-transparent"
+                pathname.includes("events") ? "bg-yellow-300" : "bg-transparent"
               } rounded-xl`}
               onClick={(e) => router.push("/user/events")}
             >
@@ -93,7 +93,7 @@ export default function withLayout(BaseComp: React.ElementType) {
             <div
               className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
                 pathname.includes("tickets")
-                  ? "bg-orange-500"
+                  ? "bg-yellow-300"
                   : "bg-transparent"
               } rounded-xl`}
               onClick={(e) => router.push("/user/tickets")}
@@ -128,7 +128,7 @@ export default function withLayout(BaseComp: React.ElementType) {
               <div
                 className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
                   pathname.includes("favorite")
-                    ? "bg-orange-500"
+                    ? "bg-yellow-300"
                     : "bg-transparent"
                 } rounded-xl`}
                 onClick={(e) => router.push("/user/favorite")}
@@ -151,7 +151,7 @@ export default function withLayout(BaseComp: React.ElementType) {
               <div
                 className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
                   pathname.includes("events")
-                    ? "bg-orange-500"
+                    ? "bg-yellow-300"
                     : "bg-transparent"
                 } rounded-xl`}
                 onClick={(e) => router.push("/user/events")}
@@ -175,7 +175,7 @@ export default function withLayout(BaseComp: React.ElementType) {
               <div
                 className={`flex-1 flex items-center justify-center px-2 hover:cursor-pointer transition-all ${
                   pathname.includes("tickets")
-                    ? "bg-orange-500"
+                    ? "bg-yellow-300"
                     : "bg-transparent"
                 } rounded-xl`}
                 onClick={(e) => router.push("/user/tickets")}
