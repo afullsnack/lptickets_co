@@ -9,11 +9,27 @@ html, body {
   width: 100%;
   min-height: 100vh;
   color: white;
+  scroll-behavior: smooth;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+*{
+  box-sizing: border-box;
+}
+
+.zig-zag {
+  background: linear-gradient(135deg, #aab41e 25%, transparent 25%) -50px 0, linear-gradient(225deg, #282b04 25%, transparent 25%) -50px 0, linear-gradient(315deg, #f0fd33 25%, transparent 25%), linear-gradient(45deg, #343804 25%, transparent 25%);
+  background-size: 100px 100px;
+  background-color: #000000;
+}
+
+/* background: linear-gradient(135deg, #ECEDDC 25%, transparent 25%) -50px 0, linear-gradient(225deg, #ECEDDC 25%, transparent 25%) -50px 0, linear-gradient(315deg, #ECEDDC 25%, transparent 25%), linear-gradient(45deg, #ECEDDC 25%, transparent 25%);
+  background-size: 100px 100px;
+  background-color: #EC173A; */
+
 @layer components {
   .container {
-    @apply w-screen min-h-screen desktop:max-w-screen-desktop bg-black mobile:w-[100vw] mobile:min-w-full flex flex-col items-stretch justify-start my-0 mx-auto;
+    @apply w-screen min-h-screen bg-black mobile:w-[100vw] mobile:min-w-full flex flex-col items-stretch justify-start my-0 mx-auto;
   }
 }
+/* desktop:max-w-screen-desktop */

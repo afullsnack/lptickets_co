@@ -5,6 +5,8 @@ module.exports = {
   darkMode: "class",
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
     "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
@@ -20,6 +22,16 @@ module.exports = {
       backgroundImage: (theme) => ({
         "logo-primary": "url()",
       }),
+      keyframes: {
+        point: {
+          "0%": { transform: "translateX(0)", left: 0 },
+          "50%": { transform: "translateX(-100%)", left: "-100%" },
+          "100%": { transform: "translateX(0)", left: "0%" },
+        },
+      },
+      animation: {
+        point: "point 1s ease-in-out loop",
+      },
     },
   },
   variants: {
