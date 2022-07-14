@@ -376,7 +376,7 @@ const CreateEvent: NextPage = () => {
                 const ticketData = await createTicket.mutateAsync(
                   newTicketData
                 );
-                console.log(eventData as Object, "event created");
+                console.log(eventData as Object, "event created", ticketData);
               }
             }
           }}

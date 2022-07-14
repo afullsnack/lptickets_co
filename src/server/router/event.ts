@@ -63,6 +63,53 @@ export const eventRouter = createRouter()
       return event;
     },
   })
+  .mutation("like", {
+    input: z.object({ eventId: z.string() }),
+    async resolve({ ctx, input }) {
+      // Check that user is logged in
+      if (!ctx.session) {
+        return new TRPCError({
+          code: "FORBIDDEN",
+          message: "Cannot like event while logged out",
+        });
+      }
+
+      // const likedEvent = await ctx.prisma.event.findUnique({
+      //   where: { id: input.eventId },
+      // });
+
+      try {
+        const updatedEvent = await ctx.prisma.event.update({
+          where: { id: input.eventId },
+          data: {
+            likeCount: {
+              increment: 1,
+            },
+          },
+        });
+
+        const updateFave = await ctx.prisma.user.update({
+          where: {
+            id: ctx.session.user?.id,
+          },
+          data: {
+            faveEvents: {
+              connect: {
+                id: input.eventId,
+              },
+            },
+          },
+        });
+        return updateFave;
+      } catch (err) {
+        console.log(err, "An error occurred");
+        return new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Faving of event went wrong",
+        });
+      }
+    },
+  })
   .query("getSingle", {
     input: singleEventInput,
     async resolve({ input, ctx }) {
@@ -87,6 +134,11 @@ export const eventRouter = createRouter()
   .query("getAll", {
     async resolve({ ctx }) {
       // return await ctx.prisma.example.findMany();
-      return await ctx.prisma.event.findMany();
+      return await ctx.prisma.event.findMany({
+        include: {
+          tickets: true,
+          creator: true,
+        },
+      });
     },
   });

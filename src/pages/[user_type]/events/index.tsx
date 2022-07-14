@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { FaCopy } from "react-icons/fa";
 
 import { EmptyCard, EventCard } from "../../../components/Event";
 import withLayout from "../../../components/Layout";
+import { useModal } from "../../../components/Modal";
 import { trpc } from "../../../utils/trpc";
 
 const Events: NextPage = () => {
@@ -14,11 +16,26 @@ const Events: NextPage = () => {
   console.info(session, status, "Session data");
   const router = useRouter();
   const { user_type } = router.query;
-  console.log(user_type, "User type wuery params");
+  console.log(user_type, "User type query params");
+
+  const [shareLink, setShareLink] = useState<string>("");
+
+  const [shareModal, ShareModal] = useModal({
+    title: "Share event link on social media",
+    content: <ShareModalContent link={shareLink} />,
+  });
 
   const [showActionsMenu, setShowActionsMenu] = useState(false);
 
   const { data, isLoading, error } = trpc.useQuery(["events.getAll"]);
+  const faveMutation = trpc.useMutation(["events.like"], {
+    onSuccess(data) {
+      console.log(data, "Success fave data");
+    },
+    onError(err) {
+      console.log(err, "Error fave data");
+    },
+  });
   console.log(data, isLoading, error, "Query request for events");
 
   return (
@@ -115,17 +132,38 @@ const Events: NextPage = () => {
                 )}
             </ul>
             <div className="py-1">
-              <Link href="" passHref>
-                <a
+              {session?.user && (
+                <button
                   onClick={(e) => {
                     console.log("Logout clicked", e);
-                    signOut({ callbackUrl: "http://localhost:3000" });
+                    signOut({
+                      callbackUrl:
+                        process.env.NODE_ENV === "production"
+                          ? `${process.env.NEXTAUTH_URL}`
+                          : "http://localhost:3000",
+                    });
                   }}
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-red-600 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-red-500"
+                  className="block w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-600 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-red-500"
                 >
                   Logout
-                </a>
-              </Link>
+                </button>
+              )}
+              {!session?.user && (
+                <button
+                  className="block w-full px-4 py-2 text-sm text-left text-green-400 hover:bg-green-400 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-green-400"
+                  onClick={(e) => {
+                    console.log("Logout clicked", e);
+                    signIn("google", {
+                      callbackUrl:
+                        process.env.NODE_ENV === "production"
+                          ? `${process.env.NEXTAUTH_URL}/user/events`
+                          : "http://localhost:3000/user/events",
+                    });
+                  }}
+                >
+                  Sign in
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -134,7 +172,7 @@ const Events: NextPage = () => {
         <div className="flex flex-grow items-center justify-center">
           <svg
             role="status"
-            className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-500"
+            className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-200"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -167,18 +205,48 @@ const Events: NextPage = () => {
               console.log("EventCard clicked", e);
               router.push(`/user/events/${item.id}`);
             }}
-            onShareClicked={function (event): void {
-              throw new Error("Function not implemented.");
+            onShareClicked={async function (e) {
+              console.log(e, "Share clicked");
+              setShareLink(`http://localhost:3000/guest/events/${item.id}`);
+              shareModal.show();
             }}
-            onFaveClicked={function (event): void {
-              throw new Error("Function not implemented.");
+            onFaveClicked={async function (e) {
+              console.log(e, "Fave clicked");
+              const data = await faveMutation.mutateAsync({ eventId: item.id });
+              console.log(data, "Await finshed data");
             }}
             isFaved={false}
+            isFaveLoading={faveMutation.isLoading}
           />
         ))}
       {!isLoading && !data?.length && <EmptyCard />}
+
+      <ShareModal />
     </div>
   );
 };
 
 export default withLayout(Events);
+
+const ShareModalContent = ({ link }: { link: string }) => (
+  <div className="w-full">
+    <div className="flex">
+      <input
+        type="text"
+        id="event-id"
+        readOnly
+        className="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-yellow-300 focus:border-yellow-300 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-yellow-300 dark:focus:border-yellow-300"
+        value={link}
+        // placeholder="elonmusk"
+      />
+      <span
+        className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 rounded-r-md border border-l-0 border-gray-300 dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600"
+        onClick={() => {
+          console.log("Copy share link of the event");
+        }}
+      >
+        <FaCopy className="text-gray-500" />
+      </span>
+    </div>
+  </div>
+);
