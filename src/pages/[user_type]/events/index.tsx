@@ -119,17 +119,16 @@ const Events: NextPage = () => {
                   </a>
                 </Link>
               </li>
-              {(typeof session !== null || typeof session !== "undefined") &&
-                session?.user?.role !== "USER" && (
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Metrics
-                    </a>
-                  </li>
-                )}
+              {session && session?.user?.role !== "USER" && (
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Metrics
+                  </a>
+                </li>
+              )}
             </ul>
             <div className="py-1">
               {session?.user && (
@@ -152,7 +151,7 @@ const Events: NextPage = () => {
                 <button
                   className="block w-full px-4 py-2 text-sm text-left text-green-400 hover:bg-green-400 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-green-400"
                   onClick={(e) => {
-                    console.log("Logout clicked", e);
+                    console.log("Signin clicked", e);
                     signIn("google", {
                       callbackUrl:
                         process.env.NODE_ENV === "production"

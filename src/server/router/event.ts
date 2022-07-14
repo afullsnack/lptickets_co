@@ -1,3 +1,4 @@
+import { Event } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createRouter } from "./context";
@@ -35,7 +36,7 @@ export const eventRouter = createRouter()
       console.log("User session data", ctx.session?.user);
 
       // Create the event and return the created event
-      const event = await ctx.prisma.event.create({
+      const event: Event = await ctx.prisma.event.create({
         data: {
           ...input,
           creator: {
@@ -100,7 +101,7 @@ export const eventRouter = createRouter()
             },
           },
         });
-        return updateFave;
+        return updatedEvent;
       } catch (err) {
         console.log(err, "An error occurred");
         return new TRPCError({
@@ -151,7 +152,7 @@ export const eventRouter = createRouter()
         });
       }
 
-      const favedEvents = await ctx.prisma.user.findMany({
+      const favedEvents = await ctx.prisma.user.findUnique({
         where: {
           id: ctx.session.user?.id,
         },
