@@ -1,5 +1,5 @@
 import withLayout from "../../components/Layout";
-import { Ticket } from "../../components/Ticket";
+import { OwnedTicket } from "../../components/Ticket";
 import { trpc } from "../../utils/trpc";
 
 function Tickets() {
@@ -11,7 +11,18 @@ function Tickets() {
   console.log(data, isLoading, error, "Get tickets data");
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-4 w-full h-full flex flex-col items-center justify-center my-0 mx-auto">
-      <Ticket />
+      <OwnedTicket
+        item={{
+          id: "",
+          type: "",
+          cost: 0,
+          addons: [],
+          ticketCount: 0,
+          saleCount: 0,
+          eventId: "",
+          ownerId: null,
+        }}
+      />
     </div>
   );
 }

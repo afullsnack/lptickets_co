@@ -370,7 +370,7 @@ const CreateEvent: NextPage = () => {
                     type: t.type!,
                     cost: Number(t.cost),
                     ticketCount: Number(t.count),
-                    addons: t.addons,
+                    addons: t.addons!,
                   };
                 });
                 const ticketData = await createTicket.mutateAsync(
@@ -383,12 +383,13 @@ const CreateEvent: NextPage = () => {
         >
           {currentSlide === "slide1" && <a href="#slide2">Next</a>}
           {currentSlide === "slide2" && <a href="#slide3">Next</a>}
-          {currentSlide === "slide3" && (
-            <>
-              Create
-              <FaPlus className="ml-3 text-md font-light" />
-            </>
-          )}
+          {currentSlide === "slide3" &&
+            (!createEvent.isLoading || !createTicket.isLoading) && (
+              <>
+                Create
+                <FaPlus className="ml-3 text-md font-light" />
+              </>
+            )}
           {currentSlide === "slide3" &&
             (createEvent.isLoading || createTicket.isLoading) && (
               <div className="flex flex-grow items-center justify-center">

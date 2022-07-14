@@ -8,7 +8,7 @@ const createTicketData = z.array(
     cost: z.number(),
     ticketCount: z.number(),
     eventId: z.string(),
-    addons: z.array(z.string()).nullish(),
+    addons: z.array(z.string()),
   })
 );
 
@@ -34,6 +34,12 @@ export const ticketRoute = createRouter()
       // Call prisma create event and return event
       console.log("Create event input", input);
       console.log("User session data", ctx.session?.user);
+
+      const newTickets = await ctx.prisma.ticket.createMany({
+        data: input,
+      });
+
+      return newTickets;
     },
   })
   .query("getAllUserTickets", {

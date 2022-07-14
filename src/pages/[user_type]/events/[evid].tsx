@@ -10,6 +10,7 @@ import { FaShareSquare } from "react-icons/fa";
 import { Carousel } from "../../../components/Carousel";
 import withLayout from "../../../components/Layout";
 import { useModal } from "../../../components/Modal";
+import { POSTicket } from "../../../components/Ticket";
 import { trpc } from "../../../utils/trpc";
 
 const SingleEvent: NextPage = () => {
@@ -185,8 +186,14 @@ const SingleEvent: NextPage = () => {
             </div>
           </div>
           <div className="carousel-item w-full h-full flex flex-col">
-            <div className="bg-transparent border-4 border-slate-100 p-5 flex flex-col items-stretch w-full mobile:h-[calc(100vh-220px)] rounded-box flex-grow">
+            <div className="relative bg-transparent border-0 border-slate-100 p-3 flex flex-col items-stretch w-full mobile:h-[calc(100vh-220px)] rounded-box flex-grow overflow-y-scroll">
               {/* Tickets go in here */}
+              {data.tickets.map((item, idx) => (
+                <POSTicket key={item.id} item={item} />
+              ))}
+              <button className="text-sm p-4 border-4 rounded-box border-gray-400 bg-transparent absolute bottom-0 left-0 right-0 mx-3">
+                Checkout 3 ($800) tickets
+              </button>
             </div>
           </div>
           {/* <div className="carousel-item w-full h-full flex flex-col">
