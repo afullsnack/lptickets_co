@@ -333,7 +333,7 @@ const CreateEvent: NextPage = () => {
       </Carousel>
       <div className="w-full h-16 rounded-box px-5 max-w-md border-t-[1px] border-dashed border-black">
         <button
-          className="bg-white w-full h-full p-5 text-orange-500 text-lg bg-transparent font-semibold flex items-center justify-center rounded-b-2xl relative"
+          className="bg-white w-full h-full p-5 text-yellow-200 text-lg font-semibold flex items-center justify-center rounded-b-2xl relative"
           onClick={async (e) => {
             console.log("Create event clicked", e);
             if (currentSlide === "slide1") setCurrentSlide("slide2");

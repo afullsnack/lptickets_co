@@ -219,7 +219,7 @@ const Events: NextPage = () => {
             isFaveLoading={faveMutation.isLoading}
           />
         ))}
-      {!isLoading && !data?.length && <EmptyCard />}
+      {!isLoading && !error && !data?.length && <EmptyCard />}
 
       <ShareModal />
     </div>

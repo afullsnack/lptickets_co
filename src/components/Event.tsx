@@ -108,7 +108,7 @@ export const EmptyCard = () => (
         No events have been added yet, click the button at the top right to
         create a new event.
         <Link href="/user/events/create" passHref>
-          <a className="block px-4 py-2 text-orange-500 visited:text-orange-700">
+          <a className="block px-4 py-2 text-yellow-200 visited:text-yellow-400">
             Create ticket
           </a>
         </Link>

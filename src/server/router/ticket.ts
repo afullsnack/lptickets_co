@@ -37,14 +37,24 @@ export const ticketRoute = createRouter()
     },
   })
   .query("getAllUserTickets", {
-    input: singleTicketInput,
+    // input: singleTicketInput,
     async resolve({ input, ctx }) {
-      console.log("Get one event input id", input.userId);
+      // Check that user is logged in
+      if (!ctx.session) {
+        return new TRPCError({
+          code: "FORBIDDEN",
+          message: "Cannot get tickets while logged out",
+        });
+      }
+      console.log("Get one event input id");
       console.log("User session data", ctx.session);
 
-      const tickets = await ctx.prisma.ticket.findMany({
+      const tickets = await ctx.prisma.user.findMany({
         where: {
-          userId: input.userId,
+          id: ctx.session?.user?.id,
+        },
+        select: {
+          tickets: true,
         },
       });
 

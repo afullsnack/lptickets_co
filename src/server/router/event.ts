@@ -141,4 +141,25 @@ export const eventRouter = createRouter()
         },
       });
     },
+  })
+  .query("faves", {
+    async resolve({ ctx }) {
+      if (!ctx.session) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Cannot fetch faved events while logged out",
+        });
+      }
+
+      const favedEvents = await ctx.prisma.user.findMany({
+        where: {
+          id: ctx.session.user?.id,
+        },
+        select: {
+          faveEvents: true,
+        },
+      });
+
+      return favedEvents;
+    },
   });

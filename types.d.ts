@@ -14,3 +14,7 @@ declare module "next-auth/jwt/types" {
     id: string;
   }
 }
+
+declare module "react-barcode" {
+  export function Barcode();
+}
