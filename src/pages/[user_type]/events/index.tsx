@@ -119,13 +119,15 @@ const Events: NextPage = () => {
               aria-labelledby="defaultActionsDropdown"
               tabIndex={0}
             >
-              <li>
-                <Link href="/user/events/create" passHref>
-                  <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    Create event
-                  </a>
-                </Link>
-              </li>
+              {session?.user && (
+                <li>
+                  <Link href="/user/events/create" passHref>
+                    <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      Create event
+                    </a>
+                  </Link>
+                </li>
+              )}
               {session && session?.user?.role !== "USER" && (
                 <li>
                   <a
