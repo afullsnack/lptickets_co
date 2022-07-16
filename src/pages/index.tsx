@@ -32,7 +32,10 @@ const Home: NextPage = () => {
                 onClick={(e) => {
                   console.log("Clicked on sign in", e);
                   signIn("google", {
-                    callbackUrl: "http://localhost:3000/",
+                    callbackUrl:
+                      process.env.NODE_ENV === "production"
+                        ? `${process.env.NEXTAUTH_URL}/`
+                        : "http://localhost:3000/",
                   });
                 }}
               >
