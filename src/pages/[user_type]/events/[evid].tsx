@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import {
   AiOutlineArrowLeft,
   AiOutlineExclamationCircle,
@@ -13,23 +14,32 @@ import { useModal } from "../../../components/Modal";
 import { POSTicket } from "../../../components/Ticket";
 import { trpc } from "../../../utils/trpc";
 
+export interface CartItem {
+  ticketId: string;
+  qty: number;
+  cost: number;
+}
+
 const SingleEvent: NextPage = () => {
   const router = useRouter();
   const { evid, user_type } = router.query;
-  console.log(evid, user_type, "Query params");
+  // console.log(evid, user_type, "Query params");
 
   const { data, isLoading, error } = trpc.useQuery([
     "events.getSingle",
     { eventId: evid as string },
   ]);
 
-  console.log(data, isLoading, error, "Get single event data");
+  // console.log(data, isLoading, error, "Get single event data");
 
   // TODO: Setup payment modal
   const [payModal, PaymentModal] = useModal({
     title: "Choose Payment Method",
     content: <PaymentModalContent />,
   });
+
+  // TODO: Setup add to cart functionality
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-4 w-full h-full flex flex-col items-center justify-center space-y-0 my-0 mx-auto">
@@ -90,10 +100,11 @@ const SingleEvent: NextPage = () => {
           </svg>
         </div>
       )}
+
       {!isLoading && !error && data && (
         <Carousel itemLen={3}>
           <div className="carousel-item w-full h-full flex flex-col">
-            <div className="bg-transparent border-4 border-slate-100 p-5 flex flex-col items-stretch w-full mobile:h-[calc(100vh-220px)] rounded-box flex-grow">
+            <div className="bg-transparent border-4 border-slate-100 p-5 flex flex-col items-stretch w-full mobile:h-[calc(100vh-200px)] rounded-box flex-grow overflow-y-scroll">
               <div className="flex items-center justify-between w-full mb-4">
                 <span className="bg-orange-500 text-white text-xs font-normal mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
                   Concert
@@ -155,11 +166,11 @@ const SingleEvent: NextPage = () => {
                   </span>
                 </div>
               </div>
-              <div className="w-full flex flex-col flex-grow items-start justify-center mt-8">
+              <div className="w-full flex flex-col flex-grow items-start justify-start mt-8">
                 <span className="text-slate-100 text-xs font-semibold mb-3">
                   Event media
                 </span>
-                <div className="w-full flex flex-grow -space-x-5">
+                <div className="w-full flex flex-grow -space-x-5 min-h-16 max-h-28">
                   <img
                     className="w-1/4 h-full rounded-box border-2 border-white dark:border-gray-800"
                     src="/flutterwave-logo-2.jpeg"
@@ -186,13 +197,26 @@ const SingleEvent: NextPage = () => {
             </div>
           </div>
           <div className="carousel-item w-full h-full flex flex-col">
-            <div className="relative bg-transparent border-0 border-slate-100 p-3 flex flex-col items-stretch w-full mobile:h-[calc(100vh-220px)] rounded-box flex-grow overflow-y-scroll">
+            <div className="relative bg-transparent border-0 border-slate-100 py-3 flex flex-col items-stretch w-full mobile:h-[calc(100vh-200px)] rounded-box flex-grow overflow-y-scroll">
               {/* Tickets go in here */}
               {data.tickets.map((item, idx) => (
-                <POSTicket key={item.id} item={item} />
+                <POSTicket
+                  key={item.id}
+                  item={item}
+                  updateCart={setCart}
+                  cart={cart}
+                />
               ))}
-              <button className="text-sm p-4 border-4 rounded-box border-gray-400 bg-transparent absolute bottom-0 left-0 right-0 mx-3">
-                Checkout 3 ($800) tickets
+              <button
+                className="text-sm p-4 border-4 rounded-box border-gray-400 bg-transparent mt-3"
+                onClick={(e) => {
+                  console.info(cart, "Cart items on check out");
+                  payModal.show();
+                }}
+              >
+                Buy {cart.reduce((prev, curr) => prev + curr.qty, 0)} ($
+                {cart.reduce((prev, curr) => prev + curr.qty * curr.cost, 0)})
+                tickets
               </button>
             </div>
           </div>
