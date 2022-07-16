@@ -81,7 +81,9 @@ function Tickets() {
         !error &&
         typeof data?.tickets !== "undefined" &&
         !data?.tickets?.length &&
-        data?.tickets.map((item, idx) => <OwnedTicket item={item} />)}
+        data?.tickets.map((item, idx) => (
+          <OwnedTicket key={item.id} item={item} />
+        ))}
     </div>
   );
 }
