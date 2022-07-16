@@ -2,7 +2,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import withLayout from "../../components/Layout";
 import { OwnedTicket } from "../../components/Ticket";
-import { trpc } from "../../utils/trpc";
+import { BASE_URL, trpc } from "../../utils/trpc";
 
 function Tickets() {
   const { data: session, status } = useSession();
@@ -33,10 +33,7 @@ function Tickets() {
               onClick={(e) => {
                 console.log("Signin clicked", e);
                 signIn("google", {
-                  callbackUrl:
-                    process.env.NODE_ENV === "production"
-                      ? `${process.env.NEXTAUTH_URL}/user/events`
-                      : "http://localhost:3000/user/events",
+                  callbackUrl: `${BASE_URL}/user/events`,
                 });
               }}
             >

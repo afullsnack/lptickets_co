@@ -12,7 +12,7 @@ import { Carousel } from "../../../components/Carousel";
 import withLayout from "../../../components/Layout";
 import { useModal } from "../../../components/Modal";
 import { POSTicket } from "../../../components/Ticket";
-import { trpc } from "../../../utils/trpc";
+import { BASE_URL, trpc } from "../../../utils/trpc";
 
 export interface CartItem {
   ticketId: string;
@@ -69,10 +69,7 @@ const SingleEvent: NextPage = () => {
             onClick={(e) => {
               console.log("Signin clicked", e);
               signIn("google", {
-                callbackUrl:
-                  process.env.NODE_ENV === "production"
-                    ? `${process.env.NEXTAUTH_URL}/user/events`
-                    : "http://localhost:3000/user/events",
+                callbackUrl: `${BASE_URL}/user/events`,
               });
             }}
           >

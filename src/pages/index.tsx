@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AiOutlineArrowRight } from "react-icons/ai";
 // import { trpc } from "../utils/trpc";
 import { signIn, useSession } from "next-auth/react";
+import { BASE_URL } from "../utils/trpc";
 
 const Home: NextPage = () => {
   // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
@@ -32,10 +33,7 @@ const Home: NextPage = () => {
                 onClick={(e) => {
                   console.log("Clicked on sign in", e);
                   signIn("google", {
-                    callbackUrl:
-                      process.env.NODE_ENV === "production"
-                        ? `${process.env.NEXTAUTH_URL}/`
-                        : "http://localhost:3000/",
+                    callbackUrl: `${BASE_URL}/`,
                   });
                 }}
               >

@@ -8,7 +8,7 @@ import { FaCopy, FaHamburger } from "react-icons/fa";
 import { EmptyCard, EventCard } from "../../../components/Event";
 import withLayout from "../../../components/Layout";
 import { useModal } from "../../../components/Modal";
-import { trpc } from "../../../utils/trpc";
+import { BASE_URL, trpc } from "../../../utils/trpc";
 
 const Events: NextPage = () => {
   const { data: session, status } = useSession();
@@ -143,10 +143,7 @@ const Events: NextPage = () => {
                   onClick={(e) => {
                     console.log("Logout clicked", e);
                     signOut({
-                      callbackUrl:
-                        process.env.NODE_ENV === "production"
-                          ? `${process.env.NEXTAUTH_URL}`
-                          : "http://localhost:3000",
+                      callbackUrl: `${BASE_URL}`,
                     });
                   }}
                   className="block w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-600 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-red-500"
@@ -160,10 +157,7 @@ const Events: NextPage = () => {
                   onClick={(e) => {
                     console.log("Signin clicked", e);
                     signIn("google", {
-                      callbackUrl:
-                        process.env.NODE_ENV === "production"
-                          ? `${process.env.NEXTAUTH_URL}/user/events`
-                          : "http://localhost:3000/user/events",
+                      callbackUrl: `${BASE_URL}/user/events`,
                     });
                   }}
                 >
@@ -207,10 +201,7 @@ const Events: NextPage = () => {
               onClick={(e) => {
                 console.log("Signin clicked", e);
                 signIn("google", {
-                  callbackUrl:
-                    process.env.NODE_ENV === "production"
-                      ? `${process.env.NEXTAUTH_URL}/user/events`
-                      : "http://localhost:3000/user/events",
+                  callbackUrl: `${BASE_URL}/user/events`,
                 });
               }}
             >
