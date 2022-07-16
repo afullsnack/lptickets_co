@@ -1,8 +1,15 @@
 // import Barcode from 'react-barcode';
 
 import { Ticket } from "@prisma/client";
-import { useCallback, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { CartItem } from "../pages/[user_type]/events/[evid]";
 
 export const OwnedTicket = ({ item }: { item: Ticket }) => {
   return (
@@ -86,7 +93,15 @@ export const OwnedTicket = ({ item }: { item: Ticket }) => {
   );
 };
 
-export const POSTicket = ({ item }: { item: Ticket }) => {
+export const POSTicket = ({
+  item,
+  updateCart,
+  cart,
+}: {
+  item: Ticket;
+  updateCart: Dispatch<SetStateAction<CartItem[]>>;
+  cart: CartItem[];
+}) => {
   const [selected, setSelected] = useState(false);
   const [qty, setQty] = useState<number>(1);
 
@@ -98,16 +113,42 @@ export const POSTicket = ({ item }: { item: Ticket }) => {
     if (qty <= 1) setQty(1);
     else setQty(qty - 1);
   }, [qty]);
+
+  // New addition and removal
+  useEffect(() => {
+    console.log("Event fired");
+    if (selected) {
+      // UpdateCart
+      updateCart([...cart, { ticketId: item.id, cost: item.cost, qty }]);
+      console.log(cart, "Added item to cart");
+    } else {
+      if (cart?.length)
+        updateCart(cart?.filter((val) => val.ticketId !== item.id));
+
+      console.log(cart, "Removed item from cart");
+    }
+  }, [selected]);
+
+  // Update on qty change
+  useEffect(() => {
+    if (cart?.length) {
+      const idx = cart?.findIndex((val) => (val.ticketId = item.id));
+      cart[idx]!.qty = qty;
+      updateCart([...cart]);
+      console.log(cart, "Updated cart");
+    }
+  }, [qty]);
+
   return (
     <div className="w-full h-60 overflow-clip mb-3 last:mb-0">
       <div
-        className={`w-full h-full relative inline-flex items-center justify-center p-1 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-r ${
+        className={`w-full h-full relative inline-flex items-center justify-center p-1 overflow-hidden text-sm font-medium text-gray-900 rounded-box group bg-gradient-to-r ${
           selected
             ? "from-yellow-200 via-orange-500 to-lime-500"
             : "from-gray-400 to-gray-600"
         } group-hover:from-yellow-700 group-hover:to-lime-800 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-lime-400 dark:focus:ring-lime-800`}
       >
-        <div className="w-full h-full relative flex items-stretch justify-center transition-all ease-in duration-75 bg-black text-white font-medium dark:bg-gray-900 rounded-md group-hover:cursor-pointer">
+        <div className="w-full h-full relative flex items-stretch rounded-box justify-center transition-all ease-in duration-75 bg-black text-white font-medium dark:bg-gray-900 group-hover:cursor-pointer">
           {/* Content area */}
           <div className="flex-[3] px-6 py-7 flex flex-col items-start justify-between">
             {/* Owner details */}
@@ -118,7 +159,9 @@ export const POSTicket = ({ item }: { item: Ticket }) => {
                     ? "text-yellow-200 border-yellow-200"
                     : "text-gray-400 border-gray-300"
                 } `}
-                onClick={() => setSelected(!selected)}
+                onClick={() => {
+                  setSelected(!selected);
+                }}
               >
                 {item.type}
               </div>
