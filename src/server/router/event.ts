@@ -69,7 +69,7 @@ export const eventRouter = createRouter()
     async resolve({ ctx, input }) {
       // Check that user is logged in
       if (!ctx.session) {
-        return new TRPCError({
+        throw new TRPCError({
           code: "FORBIDDEN",
           message: "Cannot like event while logged out",
         });
@@ -80,12 +80,40 @@ export const eventRouter = createRouter()
       // });
 
       try {
+        // Check if the event has been liked before
+        // ctx.session.user?.faveEvents.forEach(async (val: string) => {
+        //   if (val === input.eventId) {
+        //     // remove event Id from list
+        //     const updatedUserFaves = await ctx.prisma.user.update({
+        //       where: {
+        //         id: ctx.session?.user?.id,
+        //       },
+        //       data: {
+        //         faveEvents: ctx.session?.user?.faveEvents.filter(
+        //           (item) => item !== val
+        //         ),
+        //       },
+        //     });
+
+        //     return updatedUserFaves;
+        //   }
+        // });
+        console.log(
+          ctx.session?.user?.faveEvents.some((val) => val === input.eventId),
+          "test result for like function"
+        );
+
         const updatedEvent = await ctx.prisma.event.update({
           where: { id: input.eventId },
           data: {
-            likeCount: {
-              increment: 1,
-            },
+            likeCount:
+              ctx.session?.user?.faveEvents.some(
+                (val) => val !== input.eventId
+              ) || !ctx.session?.user?.faveEvents.length
+                ? {
+                    increment: 1,
+                  }
+                : { decrement: 1 },
           },
         });
 
@@ -94,17 +122,23 @@ export const eventRouter = createRouter()
             id: ctx.session.user?.id,
           },
           data: {
-            faveEvents: {
-              connect: {
-                id: input.eventId,
-              },
-            },
+            faveEvents:
+              ctx.session?.user?.faveEvents.some(
+                (val) => val !== input.eventId
+              ) || !ctx.session?.user?.faveEvents.length
+                ? {
+                    push: input.eventId,
+                  }
+                : ctx.session?.user?.faveEvents.filter(
+                    (item) => item !== input.eventId
+                  ),
           },
         });
+        // console.log(updateFave, "Updated users fave");
         return updatedEvent;
       } catch (err) {
         console.log(err, "An error occurred");
-        return new TRPCError({
+        throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Faving of event went wrong",
         });
@@ -135,12 +169,31 @@ export const eventRouter = createRouter()
   .query("getAll", {
     async resolve({ ctx }) {
       // return await ctx.prisma.example.findMany();
-      return await ctx.prisma.event.findMany({
+      var events = await ctx.prisma.event.findMany({
         include: {
           tickets: true,
           creator: true,
         },
       });
+
+      // if (ctx.session) {
+      const newEvent = await Promise.all(
+        events.map((event) => {
+          // return {
+          //   ...event,
+          //   isFaved: ctx.session?.user?.faveEvents.some(
+          //     (val) => val === event.id
+          //   ),
+          // };
+          return Object.assign(event, {
+            isFaved: ctx.session?.user?.faveEvents.some(
+              (val) => val === event.id
+            ),
+          });
+        })
+      );
+
+      return newEvent;
     },
   })
   .query("faves", {
@@ -152,7 +205,7 @@ export const eventRouter = createRouter()
         });
       }
 
-      const favedEvents = await ctx.prisma.user.findUnique({
+      const user = await ctx.prisma.user.findUnique({
         where: {
           id: ctx.session.user?.id,
         },
@@ -160,6 +213,12 @@ export const eventRouter = createRouter()
           faveEvents: true,
         },
       });
+
+      const events = await ctx.prisma.event.findMany();
+
+      const favedEvents = events.filter((event) =>
+        user?.faveEvents.some((val) => val === event.id)
+      );
 
       return favedEvents;
     },

@@ -1,19 +1,42 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { FaCopy } from "react-icons/fa";
 import { EventCard } from "../../components/Event";
 import withLayout from "../../components/Layout";
+import { useModal } from "../../components/Modal";
 import { trpc } from "../../utils/trpc";
 
 function Favorite() {
   const router = useRouter();
   const { user_type } = router.query;
 
+  // Invalidate utils
+  const utils = trpc.useContext();
+
   const { data, isLoading, error } = trpc.useQuery(["events.faves"]);
-  console.log(data, isLoading, error, "Fetch faves return data");
+  const faveMutation = trpc.useMutation(["events.like"], {
+    onSuccess(data) {
+      console.log(data, "Success fave data");
+      utils.invalidateQueries(["events.faves"]);
+    },
+    onError(err) {
+      console.error(err, "Error fave data");
+    },
+  });
+  // console.log(data, isLoading, error, "Fetch faves return data");
+
+  // State
+  const [shareLink, setShareLink] = useState<string>("");
+
+  const [shareModal, ShareModal] = useModal({
+    title: "Share event link on social media",
+    content: <ShareModalContent link={shareLink} />,
+  });
 
   return (
     <div className="desktop:max-w-screen-desktop mobile:p-4 w-full h-full flex flex-col items-center justify-center my-0 mx-auto">
-      {!isLoading && !data?.faveEvents.length && (
+      {!isLoading && !data?.length && !error && (
         <h1>No Faves to be viewed at this time</h1>
       )}
 
@@ -23,22 +46,36 @@ function Favorite() {
             {error.message}
           </h1>
           <br />
-          <button
-            className="block w-full px-4 py-2 text-sm text-center text-green-400 hover:bg-green-400 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-green-400"
-            onClick={(e) => {
-              console.log("Signin clicked", e);
-              signIn("google", {
-                callbackUrl:
-                  process.env.NODE_ENV === "production"
-                    ? `${process.env.NEXTAUTH_URL}/user/events`
-                    : "http://localhost:3000/user/events",
-              });
-            }}
-          >
-            Sign in
-          </button>
+          {error.data?.code === "FORBIDDEN" ? (
+            <button
+              className="block w-full px-4 py-2 text-sm text-center text-green-400 hover:bg-green-400 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-green-400"
+              onClick={(e) => {
+                console.log("Signin clicked", e);
+                signIn("google", {
+                  callbackUrl:
+                    process.env.NODE_ENV === "production"
+                      ? `${process.env.NEXTAUTH_URL}/user/events`
+                      : "http://localhost:3000/user/events",
+                });
+              }}
+            >
+              Sign in
+            </button>
+          ) : (
+            <button
+              className="block w-full px-4 py-2 text-sm text-center text-green-400 hover:bg-green-400 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-green-400"
+              onClick={(e) => {
+                if (process.env.NODE_ENV === "development")
+                  console.log("Return to events clicked", e);
+                router.push(`/${user_type}/events`);
+              }}
+            >
+              Return to events view
+            </button>
+          )}
         </>
       )}
+
       {isLoading && (
         <div className="flex flex-grow items-center justify-center">
           <svg
@@ -59,26 +96,56 @@ function Favorite() {
           </svg>
         </div>
       )}
-      {data?.faveEvents.map((item, idx) => (
-        <EventCard
-          key={item + idx.toString()}
-          onClick={(e: any) => {
-            console.log("EventCard clicked", e);
-            router.push(`/user/favorite/${item + idx.toString()}`);
-          }}
-          onShareClicked={function (e): void {
-            throw new Error("Function not implemented.");
-          }}
-          onFaveClicked={function (e): void {
-            throw new Error("Function not implemented.");
-          }}
-          isFaved={true}
-          item={item}
-          isFaveLoading={false}
-        />
-      ))}
+      {data?.map((item, idx) => {
+        console.log("Event ID", item.id);
+        return (
+          <EventCard
+            key={item + idx.toString()}
+            onClick={(e: any) => {
+              console.log("EventCard clicked", e);
+              router.push(`/${user_type}/events/${item.id}`);
+            }}
+            onShareClicked={function (e): void {
+              console.log(e, "Share clicked");
+              setShareLink(`http://localhost:3000/guest/events/${item.id}`);
+              shareModal.show();
+            }}
+            onFaveClicked={async function (e) {
+              console.log(e, "Fave clicked");
+              const data = await faveMutation.mutateAsync({ eventId: item.id });
+              console.log(data, "Await finshed data");
+            }}
+            isFaved={true}
+            item={item}
+            isFaveLoading={faveMutation.isLoading}
+          />
+        );
+      })}
     </div>
   );
 }
 
 export default withLayout(Favorite);
+
+const ShareModalContent = ({ link }: { link: string }) => (
+  <div className="w-full">
+    <div className="flex">
+      <input
+        type="text"
+        id="event-id"
+        readOnly
+        className="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-yellow-300 focus:border-yellow-300 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-yellow-300 dark:focus:border-yellow-300"
+        value={link}
+        // placeholder="elonmusk"
+      />
+      <span
+        className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 rounded-r-md border border-l-0 border-gray-300 dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600"
+        onClick={() => {
+          console.log("Copy share link of the event");
+        }}
+      >
+        <FaCopy className="text-gray-500" />
+      </span>
+    </div>
+  </div>
+);

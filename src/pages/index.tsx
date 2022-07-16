@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   return (
     <div className="w-screen h-screen bg-black">
       <div className="container relative flex flex-col items-center justify-center bg-transparent min-h-screen overflow-hidden p-10 px-0 mx-auto md:py-20 md:p-10 md:px-0">
-        <div className="flex w-auto absolute top-20 items-center justify-center bg-transparent rounded-t-box rounded-br-box">
+        <div className="flex w-auto absolute top-1/3 items-center justify-center bg-transparent rounded-t-box rounded-br-box">
           <img src="/logo/logo-white.png" width={300} alt="Logo" />
         </div>
         <div className="absolute bottom-0 right-0 left-0 h-auto">

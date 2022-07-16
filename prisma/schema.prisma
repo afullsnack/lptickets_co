@@ -24,10 +24,11 @@ model Event {
     totalTickets     Int?
     likeCount        Int?     @default(0)
     showTotalTickets Boolean? @default(false)
-    creator          User?    @relation(fields: [userId], references: [id])
-    userId           String?  @db.ObjectId
+    creator          User     @relation(fields: [userId], references: [id])
     tickets          Ticket[]
+    media            String[]
 
+    userId String @db.ObjectId
     @@map("events")
 }
 
@@ -94,13 +95,14 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    faveEvents    Event[]
+    faveEvents    String[]  @db.ObjectId
     tickets       Ticket[]
     role          Role      @default(USER)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    events Event[]
     @@map("users")
 }
 

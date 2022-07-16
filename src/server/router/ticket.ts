@@ -26,7 +26,7 @@ export const ticketRoute = createRouter()
     async resolve({ ctx, input }) {
       // Check that user is logged in
       if (!ctx.session) {
-        return new TRPCError({
+        throw new TRPCError({
           code: "FORBIDDEN",
           message: "Cannot create event while logged out",
         });
@@ -47,7 +47,7 @@ export const ticketRoute = createRouter()
     async resolve({ input, ctx }) {
       // Check that user is logged in
       if (!ctx.session) {
-        return new TRPCError({
+        throw new TRPCError({
           code: "FORBIDDEN",
           message: "Cannot get tickets while logged out",
         });
@@ -55,7 +55,7 @@ export const ticketRoute = createRouter()
       console.log("Get one event input id");
       console.log("User session data", ctx.session);
 
-      const tickets = await ctx.prisma.user.findMany({
+      const tickets = await ctx.prisma.user.findUnique({
         where: {
           id: ctx.session?.user?.id,
         },
@@ -64,7 +64,7 @@ export const ticketRoute = createRouter()
         },
       });
 
-      console.log("returned event", event);
+      console.log("returned event", tickets);
 
       return tickets;
     },

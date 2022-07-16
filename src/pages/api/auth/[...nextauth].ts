@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
           name: credentials?.name ?? "J Smith",
           email: credentials?.email ?? "example@lp.com",
         };
-        console.info(user, "signed in users info");
+        // console.info(user, "signed in users info");
         //TODO: Call endpoint to create user and pass object to be stored in db
         return user;
       },
@@ -54,15 +54,16 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           id: user.id,
-          role: user.role as String,
+          role: user.role as string,
+          faveEvents: user.faveEvents as string[],
           ...session.user,
         },
       };
-      console.log(session, user, token, "Session data in [...nextauth.js]");
+      // console.log(session, user, token, "Session data in [...nextauth.js]");
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      console.log(token, user, account, profile, isNewUser, "<<<<[JWT]>>>>");
+      // console.log(token, user, account, profile, isNewUser, "<<<<[JWT]>>>>");
 
       user && (token.user = user);
 

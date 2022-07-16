@@ -3,8 +3,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { FaCopy } from "react-icons/fa";
+import { FaCopy, FaHamburger } from "react-icons/fa";
 
 import { EmptyCard, EventCard } from "../../../components/Event";
 import withLayout from "../../../components/Layout";
@@ -27,10 +26,14 @@ const Events: NextPage = () => {
 
   const [showActionsMenu, setShowActionsMenu] = useState(false);
 
+  // Context util
+  const utils = trpc.useContext();
+
   const { data, isLoading, error } = trpc.useQuery(["events.getAll"]);
   const faveMutation = trpc.useMutation(["events.like"], {
     onSuccess(data) {
       console.log(data, "Success fave data");
+      utils.invalidateQueries(["events.getAll"]);
     },
     onError(err) {
       console.log(err, "Error fave data");
@@ -87,25 +90,29 @@ const Events: NextPage = () => {
             // id="defaultActionsDropdown"
             // data-dropdown-toggle="menuDropdown"
             // data-dropdown-placement="bottom"
-            className="text-white bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-full text-2xl p-2 text-center inline-flex items-center dark:bg-yellow-300 dark:hover:bg-yellow-500 dark:focus:ring-yellow-300"
+            className="text-white bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-full text-2xl p-3 text-center inline-flex items-center dark:bg-yellow-300 dark:hover:bg-yellow-500 dark:focus:ring-yellow-300"
             onClick={(e) => {
               console.log("Popup menu clicked", e);
               // router.push("/user/events/create");
               setShowActionsMenu(!showActionsMenu);
             }}
           >
-            <AiOutlineExclamationCircle style={{ fontWeight: "bolder" }} />
+            <FaHamburger className="font-bolder text-lg" />
           </button>
           {/* <!- Dropdown menu ->  ${
               showActionsMenu ? "visible" : "hidden"
             } */}
           <div
             id="menuDropdown"
-            className={`z-10 dropdown-content bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 transition-all`}
+            className={`z-10 ${
+              showActionsMenu ? "visible" : "hidden"
+            } dropdown-content bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 transition-all`}
           >
             <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-              <div>Bonnie Green</div>
-              <div className="font-medium truncate">name@flowbite.com</div>
+              <div>{session && session.user?.name}</div>
+              <div className="font-medium truncate">
+                {session && session.user?.email}
+              </div>
             </div>
             <ul
               className="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -187,13 +194,43 @@ const Events: NextPage = () => {
           </svg>
         </div>
       )}
-      {!isLoading && !data && error && (
+
+      {!data && error && (
         <>
           <h1 className="text-lg text-white font-serif font-light">
             {error.message}
           </h1>
+          <br />
+          {error.data?.code === "FORBIDDEN" ? (
+            <button
+              className="block w-full px-4 py-2 text-sm text-center text-green-400 hover:bg-green-400 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-green-400"
+              onClick={(e) => {
+                console.log("Signin clicked", e);
+                signIn("google", {
+                  callbackUrl:
+                    process.env.NODE_ENV === "production"
+                      ? `${process.env.NEXTAUTH_URL}/user/events`
+                      : "http://localhost:3000/user/events",
+                });
+              }}
+            >
+              Sign in
+            </button>
+          ) : (
+            <button
+              className="block w-full px-4 py-2 text-sm text-center text-green-400 hover:bg-green-400 hover:text-white dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-green-400"
+              onClick={(e) => {
+                if (process.env.NODE_ENV === "development")
+                  console.log("Return to events clicked", e);
+                router.push(`/${user_type}/events`);
+              }}
+            >
+              Return to events view
+            </button>
+          )}
         </>
       )}
+
       {!isLoading &&
         data &&
         data.map((item) => (
@@ -210,11 +247,17 @@ const Events: NextPage = () => {
               shareModal.show();
             }}
             onFaveClicked={async function (e) {
-              console.log(e, "Fave clicked");
-              const data = await faveMutation.mutateAsync({ eventId: item.id });
-              console.log(data, "Await finshed data");
+              try {
+                console.log(e, "Fave clicked");
+                const data = await faveMutation.mutateAsync({
+                  eventId: item.id,
+                });
+                console.log(data, "Await finshed data");
+              } catch (err) {
+                console.error(err, "error message");
+              }
             }}
-            isFaved={false}
+            isFaved={item?.isFaved!}
             isFaveLoading={faveMutation.isLoading}
           />
         ))}
