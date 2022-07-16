@@ -9,7 +9,7 @@ import { prisma } from "../../../server/db/client";
 
 export const authOptions: NextAuthOptions = {
   // adapters
-  session: {},
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   // Configure one or more authentication providers
   providers: [
