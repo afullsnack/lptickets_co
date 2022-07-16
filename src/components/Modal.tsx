@@ -19,8 +19,8 @@ export function useModal({ title, content }: any) {
         tabIndex={-1}
         aria-hidden="true"
         className={`${
-          visible ? null : "hidden"
-        } overflow-y-auto overflow-x-hidden fixed top-1/3 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full`}
+          visible ? "visible opacity-100" : "hidden opacity-0"
+        } overflow-y-auto overflow-x-hidden fixed top-1/3 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full transition-all`}
       >
         <div className="relative p-4 w-full max-w-2xl h-full md:h-auto">
           {/* <!-- Modal content --> */}
