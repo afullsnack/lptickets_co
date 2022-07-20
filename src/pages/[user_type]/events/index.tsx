@@ -87,9 +87,9 @@ const Events: NextPage = () => {
         <div className="dropdown dropdown-end">
           <button
             type="button"
-            tabIndex={0}
-            id="defaultActionsDropdown"
-            data-dropdown-toggle="menuDropdown"
+            // tabIndex={0}
+            // id="defaultActionsDropdown"
+            // data-dropdown-toggle="menuDropdown"
             data-dropdown-placement="bottom"
             className="text-white bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-full text-2xl p-3 text-center inline-flex items-center dark:bg-yellow-300 dark:hover:bg-yellow-500 dark:focus:ring-yellow-300"
             onClick={(e) => {
@@ -117,8 +117,8 @@ const Events: NextPage = () => {
             </div>
             <ul
               className="py-1 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby="defaultActionsDropdown"
-              tabIndex={0}
+              // aria-labelledby="defaultActionsDropdown"
+              // tabIndex={0}
             >
               {session?.user && (
                 <li>
