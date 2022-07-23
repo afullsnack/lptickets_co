@@ -66,7 +66,7 @@ const CreateEvent: NextPage = () => {
   }, [asPath]);
 
   return (
-    <div className="desktop:max-w-screen-desktop mobile:p-6 w-full h-full flex flex-col items-center justify-center space-y-0 my-0 mx-auto">
+    <div className="desktop:max-w-screen-desktop mobile:p-6 w-full h-full flex flex-col items-center justify-center space-y-0 my-0 mx-auto overflow-y-scroll">
       <div className="flex items-center justify-start mb-8 py-2 px-5 space-x-5 w-full">
         <AiOutlineArrowLeft
           className="text-white text-lg"
@@ -85,7 +85,7 @@ const CreateEvent: NextPage = () => {
       {/* <div className="flex-grow flex flex-col"> */}
       <Carousel itemLen={3}>
         <div id="slide1" className="carousel-item w-full h-full flex flex-col">
-          <div className="bg-white p-3 flex flex-col items-stretch w-full mobile:h-[calc(100vh-280px)] rounded-box flex-grow">
+          <div className="bg-white p-3 flex flex-col items-stretch w-full mobile:h-[calc(100vh-64px)] rounded-box flex-grow">
             {/* <div className="flex items-center justify-between w-full mb-4">
               <span className="bg-orange-500 text-white text-xs font-normal mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
                 Concert
@@ -190,7 +190,7 @@ const CreateEvent: NextPage = () => {
                 />
               </div>
             </div>
-            <div className="w-full flex items-center justify-center mb-6">
+            <div className="w-full flex items-center justify-center mb-6 bg-white">
               <div className="mb-0 w-full">
                 <label
                   htmlFor="ticketTotal"
@@ -218,7 +218,7 @@ const CreateEvent: NextPage = () => {
           </div>
         </div>
         <div id="slide2" className="carousel-item w-full h-full flex flex-col">
-          <div className="bg-white p-3 flex flex-col items-stretch w-full mobile:h-[calc(100vh-280px)] rounded-box flex-grow overflow-y-scroll">
+          <div className="bg-white p-3 flex flex-col items-stretch w-full mobile:h-[calc(100vh-64px)] rounded-box flex-grow overflow-y-scroll">
             {/* Ticket creation panel */}
             {tickets?.map((t, idx) => (
               <TicketCreateCard
@@ -261,7 +261,7 @@ const CreateEvent: NextPage = () => {
           </div>
         </div>
         <div id="slide3" className="carousel-item w-full h-full flex flex-col">
-          <div className="bg-white p-3 flex flex-col items-center justify-start space-y-3 w-full mobile:h-[calc(100vh-280px)] rounded-box flex-grow overflow-y-scroll">
+          <div className="bg-white p-3 flex flex-col items-center justify-start space-y-3 w-full mobile:h-[calc(100vh-64px)] rounded-box flex-grow overflow-y-scroll">
             <div className="flex justify-center items-center w-9/12 flex-[3]">
               <label
                 htmlFor="dropzone-file"
