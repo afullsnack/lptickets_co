@@ -3,6 +3,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { AiOutlineClose } from "react-icons/ai";
 import { FaCopy } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 
@@ -25,7 +26,7 @@ const Events: NextPage = () => {
     content: <ShareModalContent link={shareLink} />,
   });
 
-  const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
 
   // Context util
   const utils = trpc.useContext();
@@ -98,7 +99,11 @@ const Events: NextPage = () => {
               setShowActionsMenu((prev) => !prev);
             }}
           >
-            <GiHamburgerMenu className="font-bolder text-lg" />
+            {showActionsMenu ? (
+              <AiOutlineClose className="font-bolder text-lg" />
+            ) : (
+              <GiHamburgerMenu className="font-bolder text-lg" />
+            )}
           </button>
           {/* <!- Dropdown menu ->  ${
               showActionsMenu ? "visible" : "hidden"
@@ -107,7 +112,7 @@ const Events: NextPage = () => {
             id="menuDropdown"
             className={`z-10 ${
               showActionsMenu ? "visible" : "hidden"
-            } dropdown-content bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 transition-all`}
+            } right-0 absolute bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 transition-all`}
           >
             <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
               <div>{session && session.user?.name}</div>
